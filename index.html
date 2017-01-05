@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>UI Testing Tools</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h1>UI Testing Tools</h1>
+                <p>
+                    Appium and Espresso
+                </p>
+            </section>
+            <section>
+                <h2>Appium</h2>
+                <img src="img/appium.png">
+                <ul>
+                    <li>Appium is an open source test automation framework for use with native, hybrid and mobile web apps. </li>
+                    <li>It drives iOS, Android, and Windows apps using the WebDriver protocol.</li>
+                    <li>It supports multiple languages.</li>
+            </section>
+            <section>
+                <h2>Espresso</h2>
+                <img src="img/espresso.png" width="200" height="auto">
+                <ul>
+                    <li>Espresso is a UI test framework (part of the Android Testing Support Library) that allows you to create automated UI tests for Android Application.</li>
+                    <li>Simple, extensible and predictable API.</li>
+                    <li>Synchronization of test actions with the UI elements.</li>
+                    <li>VERY FAST!</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Comparison chart</h2>
+                <table class="reveal">
+                    <tr>
+                        <td>Criteria</td>
+                        <td>Appium</td>
+                        <td>Espresso</td>
+                    </tr>
+                    <tr>
+                        <td>Platform</td>
+                        <td>Cross Platform</td>
+                        <td>Android</td>
+                    </tr>
+                    <tr>
+                        <td>Requirement</td>
+                        <td>APK/IPA</td>
+                        <td>Test APK(source code)</td>
+                    </tr>
+                    <tr>
+                        <td>Languages</td>
+                        <td>Multiple languages</td>
+                        <td>Java</td>
+                    </tr>
+                    <tr>
+                        <td>Creator</td>
+                        <td>Open source, Sauce Labs</td>
+                        <td>Google</td>
+                    </tr>
+                    <tr>
+                        <td>Philosophy</td>
+                        <td>Black-box</td>
+                        <td>Grey-box</td>
+                    </tr>
+                    <tr>
+                        <td>Speed</td>
+                        <td>Slow</td>
+                        <td>Very fast</td>
+                    </tr>
+                    <tr>
+                        <td>Ease of writing</td>
+                        <td>Medium</td>
+                        <td>Medium for non dev, very easy for dev</td>
+                    </tr>
+                    <tr>
+                        <td>Suitable for</td>
+                        <td>Multiplatform</td>
+                        <td>Focus on Android or require high quality & speed</td>
+                    </tr>
+                </table>
+
+            </section>
+            <section>
+                <h3>Espresso Example</h3>
+                <pre><code data-trim data-noescape>
+					UserId userId = new UserId();
+        userId.setUserId(1);
+        when(mMockInnovatubeRepository.createAccount(anyString(), anyString(), anyString(),
+                anyString(), anyString(), anyString(), anyString()))
+                .thenReturn(Observable.just(userId).delay(500, TimeUnit.MILLISECONDS));
+        activityActivityTestRule.launchActivity(null);
+        onView(withId(R.id.edt_first_name)).perform(typeText("Ethan"));
+        onView(withId(R.id.edt_last_name)).perform(typeText("Le"));
+        onView(withId(R.id.edt_email_address)).perform(typeText("ethan.le@innovatube.com"));
+        onView(withId(R.id.edt_password)).perform(typeText("123456"));
+        onView(withId(R.id.edt_confirm_password)).perform(typeText("123456"), closeSoftKeyboard());
+        onView(withId(R.id.edt_dob)).perform(click());
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.edt_promotion_code)).perform(typeText("123456"), closeSoftKeyboard());
+        onView(withId(R.id.btn_join)).perform(click());
+        IdlingResource idlingResource = new LoadingProgressIdlingResource(activityActivityTestRule.getActivity().getSupportFragmentManager(), LoadingProgress.TAG);
+        Espresso.registerIdlingResources(idlingResource);
+        onView(withText("Hello World!")).check(matches(isDisplayed()));
+        Espresso.unregisterIdlingResources(idlingResource);
+				</code></pre>
+            </section>
+            <section>
+                <h3>Espresso Example</h3>
+                <video data-autoplay src="video/espresso.mp4"></video>
+            </section>
+            <section>
+                <h3>Appium Example</h3>
+                <pre><code data-trim data-noescape>
+					AndroidDriver driver;
+    String fileName = "boilerplate.apk";
+    File boilerplateFile = new File("src/main/resources/" + fileName);
+
+    @Before
+    public void setUp() throws Exception {
+        DesiredCapabilities cap = new DesiredCapabilities();
+        cap.setCapability("app", boilerplateFile);
+        cap.setCapability("platformName", "Android");
+        cap.setCapability("deviceName", "G935F");
+        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), cap);
+        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void testSignInWithCorrectAccount() throws Exception {
+        System.out.print(driver.currentActivity());
+        driver.findElementById("edt_first_name").sendKeys("Ethan");
+        driver.findElementById("edt_last_name").sendKeys("Le");
+        driver.findElementById("edt_email_address").sendKeys("ethan.le@innovatube.com");
+        driver.findElementById("edt_password").sendKeys("123456");
+        driver.findElementById("edt_confirm_password").sendKeys("123456");
+        driver.navigate().back();
+        driver.findElementById("edt_dob").click();
+        driver.findElement(By.xpath("//android.widget.Button[contains(@text, 'OK')]")).click();
+        driver.findElementById("edt_promotion_code").sendKeys("123456");
+        driver.navigate().back();
+        driver.findElementById("btn_join").click();
+        WebDriverWait wait = new WebDriverWait(driver,20);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//android.widget.TextView[contains(@text, 'Hello World!')]")));
+
+    }	
+				</code></pre>
+            </section>
+            <section>
+                <h3>Appium Example</h3>
+                <video data-autoplay src="video/appium.mp4"></video>
+            </section>
+        </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            history: true,
+
+            // More info https://github.com/hakimel/reveal.js#dependencies
+            dependencies: [{
+                src: 'plugin/markdown/marked.js'
+            }, {
+                src: 'plugin/markdown/markdown.js'
+            }, {
+                src: 'plugin/notes/notes.js',
+                async: true
+            }, {
+                src: 'plugin/highlight/highlight.js',
+                async: true,
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }]
+        });
+    </script>
+</body>
+
+</html>
